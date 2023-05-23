@@ -6,7 +6,7 @@
 //
 
 #import "YYKlineView.h"
-#import "Masonry.h"
+#import <Masonry/Masonry.h>
 #import "UIColor+YYKline.h"
 #import "YYKlineGlobalVariable.h"
 #import "YYKlineRootModel.h"
