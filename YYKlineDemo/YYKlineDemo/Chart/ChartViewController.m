@@ -34,15 +34,23 @@ static void blockCleanUp(__strong void(^*block)(void)) {
     self.view.backgroundColor = UIColor.backgroundColor;
     // 初始化K线View
     self.stockChartView = [[ChartView alloc] initWithItemModels:@[
+//        [ChartViewItemModel itemModelWithTitle:@"指标" type:YYKlineTypeIndicator],
+//        [ChartViewItemModel itemModelWithTitle:@"分时" type:YYKlineTypeTimeLine],
+//        [ChartViewItemModel itemModelWithTitle:@"1分" type:YYKlineTypeKline],
+//        [ChartViewItemModel itemModelWithTitle:@"5分" type:YYKlineTypeKline],
+//        [ChartViewItemModel itemModelWithTitle:@"15分" type:YYKlineTypeKline],
+//        [ChartViewItemModel itemModelWithTitle:@"30分" type:YYKlineTypeKline],
+//        [ChartViewItemModel itemModelWithTitle:@"60分" type:YYKlineTypeKline],
+//        [ChartViewItemModel itemModelWithTitle:@"日线" type:YYKlineTypeKline],
+//        [ChartViewItemModel itemModelWithTitle:@"周线" type:YYKlineTypeKline],
+        
         [ChartViewItemModel itemModelWithTitle:@"指标" type:YYKlineTypeIndicator],
         [ChartViewItemModel itemModelWithTitle:@"分时" type:YYKlineTypeTimeLine],
-        [ChartViewItemModel itemModelWithTitle:@"1分" type:YYKlineTypeKline],
-        [ChartViewItemModel itemModelWithTitle:@"5分" type:YYKlineTypeKline],
-        [ChartViewItemModel itemModelWithTitle:@"15分" type:YYKlineTypeKline],
-        [ChartViewItemModel itemModelWithTitle:@"30分" type:YYKlineTypeKline],
-        [ChartViewItemModel itemModelWithTitle:@"60分" type:YYKlineTypeKline],
-        [ChartViewItemModel itemModelWithTitle:@"日线" type:YYKlineTypeKline],
-        [ChartViewItemModel itemModelWithTitle:@"周线" type:YYKlineTypeKline],
+        [ChartViewItemModel itemModelWithTitle:@"年线" type:YYKlineTypeTimeLine],
+        [ChartViewItemModel itemModelWithTitle:@"日K" type:YYKlineTypeKline],
+        [ChartViewItemModel itemModelWithTitle:@"周K" type:YYKlineTypeKline],
+        [ChartViewItemModel itemModelWithTitle:@"月K" type:YYKlineTypeKline]
+        
     ]];
     self.stockChartView.dataSource = self;
     [self.view addSubview:self.stockChartView];
@@ -75,12 +83,22 @@ static void blockCleanUp(__strong void(^*block)(void)) {
 
     [self.indicatorView startAnimating];
     
-    NSDictionary *dict = @{ @1: @"1m", @2: @"1m", @3: @"5m", @4: @"15m", @5: @"30m", @6: @"1h", @7: @"1d", @8: @"1w",};
-    NSString *url = [NSString stringWithFormat:@"https://h5-market.niuyan.com/web/v1/ticker/kline?exchange_id=zb&base_symbol=VSYS&quote_symbol=QC&lan=zh-cn&size=500&interval=%@", dict[@(index)]];
+//    NSDictionary *dict = @{ @1: @"1m", @2: @"1m", @3: @"5m", @4: @"15m", @5: @"30m", @6: @"1h", @7: @"1d", @8: @"1w",};
+//    NSString *url = [NSString stringWithFormat:@"https://h5-market.niuyan.com/web/v1/ticker/kline?exchange_id=zb&base_symbol=VSYS&quote_symbol=QC&lan=zh-cn&size=500&interval=%@", dict[@(index)]];
+//    NSString *url = @"https://data.jianshukeji.com/stock/history/000001";
     
+    NSDictionary *urls = @{
+        @1: @"https://finance.pae.baidu.com/selfselect/getstockquotation?all=1&code=09988&group=quotation_minute_hk",//指标
+        @2: @"https://finance.pae.baidu.com/selfselect/getstockquotation?all=1&code=09988&group=quotation_minute_hk",//分时图
+        @3: @"https://finance.pae.baidu.com/selfselect/getstockquotation?all=1&code=09988&newFormat=1&eprop=yearK&ktype=1&group=quotation_kline_hk",//年折线图
+        @4: @"https://finance.pae.baidu.com/selfselect/getstockquotation?all=1&code=09988&newFormat=1&ktype=1&group=quotation_kline_hk",//日K
+        @5: @"https://finance.pae.baidu.com/selfselect/getstockquotation?all=1&code=09988&newFormat=1&start_time=2019-11-26+00:00:00&ktype=2&group=quotation_kline_hk",//周K
+        @6: @"https://finance.pae.baidu.com/selfselect/getstockquotation?all=1&code=09988&newFormat=1&start_time=2019-11-26+00:00:00&ktype=3&group=quotation_kline_hk",//月K
+    };
+
     __weak typeof(self) weakSelf = self;
     
-    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:url] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:[NSURL URLWithString:urls[@(index+1)]] completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
         defer {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -92,8 +110,24 @@ static void blockCleanUp(__strong void(^*block)(void)) {
         NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
         if (error) return;
         
-        YYKlineRootModel *groupModel = [YYKlineRootModel objectWithArray:dict[@"data"][@"data"]];
-        [weakSelf.stockChartView reloadWithData:groupModel];
+        //YYKlineRootModel *groupModel = [YYKlineRootModel objectWithArray:dict[@"data"][@"data"]];
+        
+        NSLog(@"\n%@\n************* %@",urls[@(index+1)],dict);
+        
+        NSString *dataStr = @"";
+        YYKlineRootModel *groupModel;
+        if (index>=2) {
+            dataStr = dict[@"Result"][@"newMarketData"][@"marketData"];
+            groupModel = [YYKlineRootModel rj_objectKChartWithArray:[dataStr componentsSeparatedByString:@";"]];
+        }else{
+            dataStr = dict[@"Result"][@"newMarketData"][@"marketData"][0][@"p"];
+            groupModel = [YYKlineRootModel rj_objectTChartWithArray:[dataStr componentsSeparatedByString:@";"]];
+        }
+        
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf.stockChartView reloadWithData:groupModel];
+        });
     }];
     
     [task resume];

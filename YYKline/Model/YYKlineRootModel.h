@@ -21,7 +21,8 @@ typedef NS_ENUM(NSInteger, YYKlineIncicator) {
 };
 
 @interface YYKlineRootModel : NSObject
-
++ (instancetype) rj_objectKChartWithArray:(NSArray *)arr;
++ (instancetype) rj_objectTChartWithArray:(NSArray *)arr;
 + (instancetype) objectWithArray:(NSArray *)arr;
 
 @property (nonatomic, copy) NSArray<YYKlineModel *> *models;

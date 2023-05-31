@@ -5,6 +5,7 @@ inhibit_all_warnings!
 target 'YYKline' do
 
   pod 'Masonry'
+  # pod 'MJExtension'
 
 end
 

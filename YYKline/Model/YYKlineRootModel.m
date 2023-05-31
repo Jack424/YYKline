@@ -9,6 +9,75 @@
 #import "YYKlineGlobalVariable.h"
 
 @implementation YYKlineRootModel
++ (instancetype) rj_objectKChartWithArray:(NSArray *)arr {
+    NSAssert([arr isKindOfClass:[NSArray class]], @"arr不是一个数组，请检查返回数据类型并手动适配");
+    YYKlineRootModel *groupModel = [YYKlineRootModel new];
+    NSMutableArray *mArr = @[].mutableCopy;
+    NSInteger index = 0;
+    for (NSInteger i = [arr count]-1; i>=0; i--) {
+        NSString *itemStr = arr[i];
+        NSArray *item = [itemStr componentsSeparatedByString:@","];
+        if (item.count<=7) {
+            continue;
+        }
+        YYKlineModel *model = [YYKlineModel new];
+        model.index = index;
+        model.Timestamp = item[0];//@([NSString stringWithFormat:@"%@000",item[0]].doubleValue);
+        model.Open = item[2];
+        model.High = item[5];
+        model.Low = item[6];
+        model.Close = item[3];
+        model.Volume = item[4];
+        model.PrevModel = mArr.lastObject;
+        [mArr addObject:model];
+        index++;
+    }
+    groupModel.models = mArr;
+    [groupModel calculateIndicators:YYKlineIncicatorMACD];
+    [groupModel calculateIndicators:YYKlineIncicatorMA];
+    [groupModel calculateIndicators:YYKlineIncicatorKDJ];
+    [groupModel calculateIndicators:YYKlineIncicatorRSI];
+    [groupModel calculateIndicators:YYKlineIncicatorBOLL];
+    [groupModel calculateIndicators:YYKlineIncicatorWR];
+    [groupModel calculateIndicators:YYKlineIncicatorEMA];
+    [groupModel calculateNeedDrawTimeModel];
+    return groupModel;
+}
++ (instancetype) rj_objectTChartWithArray:(NSArray *)arr {
+    NSAssert([arr isKindOfClass:[NSArray class]], @"arr不是一个数组，请检查返回数据类型并手动适配");
+    YYKlineRootModel *groupModel = [YYKlineRootModel new];
+    NSMutableArray *mArr = @[].mutableCopy;
+    NSInteger index = 0;
+    for (NSInteger i = [arr count]-1; i>=0; i--) {
+        NSString *itemStr = arr[i];
+        NSArray *item = [itemStr componentsSeparatedByString:@","];
+        if (item.count<=7) {
+            continue;
+        }
+        YYKlineModel *model = [YYKlineModel new];
+        model.index = index;
+        model.Timestamp = item[0];//@([NSString stringWithFormat:@"%@000",item[0]].doubleValue);
+        model.Open = item[2];
+        model.High = item[2];
+        model.Low = item[2];
+        model.Close = item[2];
+        model.Volume = item[6];
+        model.PrevModel = mArr.lastObject;
+        [mArr addObject:model];
+        index++;
+    }
+    groupModel.models = mArr;
+    [groupModel calculateIndicators:YYKlineIncicatorMACD];
+    [groupModel calculateIndicators:YYKlineIncicatorMA];
+    [groupModel calculateIndicators:YYKlineIncicatorKDJ];
+    [groupModel calculateIndicators:YYKlineIncicatorRSI];
+    [groupModel calculateIndicators:YYKlineIncicatorBOLL];
+    [groupModel calculateIndicators:YYKlineIncicatorWR];
+    [groupModel calculateIndicators:YYKlineIncicatorEMA];
+    [groupModel calculateNeedDrawTimeModel];
+    return groupModel;
+}
+
 + (instancetype) objectWithArray:(NSArray *)arr {
     NSAssert([arr isKindOfClass:[NSArray class]], @"arr不是一个数组，请检查返回数据类型并手动适配");
     YYKlineRootModel *groupModel = [YYKlineRootModel new];
