@@ -294,8 +294,8 @@
 		4081AD81254866D80039DE0F /* Variable */ = {
 			isa = PBXGroup;
 			children = (
-				4081AD82254866D80039DE0F /* YYKlineGlobalVariable.m */,
 				4081AD83254866D80039DE0F /* YYKlineGlobalVariable.h */,
+				4081AD82254866D80039DE0F /* YYKlineGlobalVariable.m */,
 			);
 			path = Variable;
 			sourceTree = "<group>";
@@ -311,8 +311,8 @@
 		4081AD86254866D80039DE0F /* Theme */ = {
 			isa = PBXGroup;
 			children = (
-				4081AD87254866D80039DE0F /* UIColor+YYKline.m */,
 				4081AD88254866D80039DE0F /* UIColor+YYKline.h */,
+				4081AD87254866D80039DE0F /* UIColor+YYKline.m */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -320,13 +320,13 @@
 		4081AD89254866D80039DE0F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				4081AD8A254866D80039DE0F /* YYKlineRootModel.h */,
 				4081AD8B254866D80039DE0F /* YYIndicatorModel.h */,
-				4081AD8C254866D80039DE0F /* YYKlineModel.m */,
-				4081AD8D254866D80039DE0F /* YYMinMaxModel.h */,
-				4081AD8E254866D80039DE0F /* YYKlineRootModel.m */,
-				4081AD8F254866D80039DE0F /* YYKlineModel.h */,
 				4081AD90254866D80039DE0F /* YYIndicatorModel.m */,
+				4081AD8F254866D80039DE0F /* YYKlineModel.h */,
+				4081AD8C254866D80039DE0F /* YYKlineModel.m */,
+				4081AD8A254866D80039DE0F /* YYKlineRootModel.h */,
+				4081AD8E254866D80039DE0F /* YYKlineRootModel.m */,
+				4081AD8D254866D80039DE0F /* YYMinMaxModel.h */,
 				4081AD91254866D80039DE0F /* YYMinMaxModel.m */,
 			);
 			path = Model;

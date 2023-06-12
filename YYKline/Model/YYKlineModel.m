@@ -25,7 +25,7 @@
     if (!_V_HHMM) {
         NSDate *date = [NSDate dateWithTimeIntervalSince1970:_Timestamp.doubleValue];
         NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-        formatter.dateFormat = @"HH:mm";
+        formatter.dateFormat = @"MM-dd";
         NSString *dateStr = [formatter stringFromDate:date];
         _V_HHMM = dateStr;
     }

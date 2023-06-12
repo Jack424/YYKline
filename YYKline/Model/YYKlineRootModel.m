@@ -13,15 +13,14 @@
     NSAssert([arr isKindOfClass:[NSArray class]], @"arr不是一个数组，请检查返回数据类型并手动适配");
     YYKlineRootModel *groupModel = [YYKlineRootModel new];
     NSMutableArray *mArr = @[].mutableCopy;
-    NSInteger index = 0;
-    for (NSInteger i = [arr count]-1; i>=0; i--) {
+    for (int i = 0; i < arr.count; i++) {
         NSString *itemStr = arr[i];
         NSArray *item = [itemStr componentsSeparatedByString:@","];
         if (item.count<=7) {
             continue;
         }
         YYKlineModel *model = [YYKlineModel new];
-        model.index = index;
+        model.index = i;
         model.Timestamp = item[0];//@([NSString stringWithFormat:@"%@000",item[0]].doubleValue);
         model.Open = item[2];
         model.High = item[5];
@@ -30,7 +29,6 @@
         model.Volume = item[4];
         model.PrevModel = mArr.lastObject;
         [mArr addObject:model];
-        index++;
     }
     groupModel.models = mArr;
     [groupModel calculateIndicators:YYKlineIncicatorMACD];
@@ -47,15 +45,14 @@
     NSAssert([arr isKindOfClass:[NSArray class]], @"arr不是一个数组，请检查返回数据类型并手动适配");
     YYKlineRootModel *groupModel = [YYKlineRootModel new];
     NSMutableArray *mArr = @[].mutableCopy;
-    NSInteger index = 0;
-    for (NSInteger i = [arr count]-1; i>=0; i--) {
+    for (int i = 0; i < arr.count; i++) {
         NSString *itemStr = arr[i];
         NSArray *item = [itemStr componentsSeparatedByString:@","];
         if (item.count<=7) {
             continue;
         }
         YYKlineModel *model = [YYKlineModel new];
-        model.index = index;
+        model.index = i;
         model.Timestamp = item[0];//@([NSString stringWithFormat:@"%@000",item[0]].doubleValue);
         model.Open = item[2];
         model.High = item[2];
@@ -64,7 +61,6 @@
         model.Volume = item[6];
         model.PrevModel = mArr.lastObject;
         [mArr addObject:model];
-        index++;
     }
     groupModel.models = mArr;
     [groupModel calculateIndicators:YYKlineIncicatorMACD];
